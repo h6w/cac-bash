@@ -20,6 +20,7 @@ do
          sleep 300
       else
          echo "All is fucked."
+         sleep 300
       fi
    fi
 done
