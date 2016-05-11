@@ -1,6 +1,5 @@
 #!/bin/bash
-key=""
-login=""
+source cac-config.bash
 url="https://panel.cloudatcost.com/api/v1/"
 uri="powerop.php"
 sid=""

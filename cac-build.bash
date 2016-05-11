@@ -1,6 +1,5 @@
 #!/bin/bash
-key="APIKEYFROMTHEWEBSITEGOESHERE"
-login="YOUREMAIL@ADDRESS.COMGOESHERE"
+source cac-config.bash
 url="https://panel.cloudatcost.com/api/v1/"
 uri="cloudpro/resources.php"
 mapfile -t stats < <(curl -s -k "${url}${uri}?key=${key}&login=${login}" | sed -e 's/{/\n/g' -e 's/\}//g' | grep -i cpu)
