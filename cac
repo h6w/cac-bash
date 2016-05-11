@@ -1,7 +1,8 @@
 #!/bin/bash
 
-usage() {
-    echo <<<EOT
+usage () 
+{
+    cat <<EOT
 	CloudAtCost API CLI
 	Usage: cac [action]
 	Where: action - is one of:
@@ -13,7 +14,7 @@ usage() {
 EOT
 }
 
-if [ "$#" -le 1 ]; then
+if [ "$#" -lt 1 ]; then
     usage
     exit 0
 fi
