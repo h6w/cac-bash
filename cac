@@ -11,6 +11,15 @@ usage ()
 		list - list VMs
 		reset - reset a VM
 		templates - list templates
+
+	TODO:
+		power - power operations (on, off, reset)
+		tasks - list pending tasks
+		rename - rename a VM
+		rdns - add a reverse DNS to a VM
+		console - get the console
+		runmode - change the VM runmode (normal,safe) default: safe
+		
 EOT
 }
 
