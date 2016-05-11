@@ -1,0 +1,23 @@
+#!/bin/bash
+
+usage() {
+    echo <<<EOT
+	CloudAtCost API CLI
+	Usage: cac [action]
+	Where: action - is one of:
+		build - build a VM
+		delete - delete a VM
+		list - list VMs
+		reset - reset a VM
+		templates - list templates
+EOT
+}
+
+if [ "$#" -le 1 ]; then
+    usage
+    exit 0
+fi
+
+. cac-$1.bash
+
+
