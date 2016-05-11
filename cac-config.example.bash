@@ -8,6 +8,7 @@ login="YOUREMAIL@ADDRESS.COMGOESHERE"
 
 url="https://panel.cloudatcost.com/api/v1/"
 declare -A uri
+uri[build]="cloudpro/resources.php"
 uri[resources]="cloudpro/resources.php"
 uri[delete]="cloudpro/delete.php"
 uri[list]="listservers.php"
