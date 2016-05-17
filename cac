@@ -1,0 +1,33 @@
+#!/bin/bash
+
+usage () 
+{
+    cat <<EOT
+	CloudAtCost API CLI
+	Usage: cac [action]
+	Where: action - is one of:
+		build - build a VM
+		delete - delete a VM
+		list - list VMs
+		reset - reset a VM
+		templates - list templates
+
+	TODO:
+		power - power operations (on, off, reset)
+		tasks - list pending tasks
+		rename - rename a VM
+		rdns - add a reverse DNS to a VM
+		console - get the console
+		runmode - change the VM runmode (normal,safe) default: safe
+		
+EOT
+}
+
+if [ "$#" -lt 1 ]; then
+    usage
+    exit 0
+fi
+
+. cac-$1.bash
+
+
