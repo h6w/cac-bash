@@ -1,8 +1,5 @@
 #!/bin/bash
-key=""
-login=""
-url="https://panel.cloudatcost.com/api/v1/"
-uri="powerop.php"
+source cac-config.bash
 sid=""
 ansuser=""
 domain=""
@@ -14,7 +11,7 @@ do
       sleep 3600
    else
       echo "$domain appears to be down, trying to reset."
-      if curl -s -o /dev/null -k --data "key=${key}&login=${login}&sid=${sid}&action=reset" "${url}${uri}"
+      if curl -s -o /dev/null -k --data "key=${key}&login=${login}&sid=${sid}&action=reset" "${url}${uri[powerop]}"
       then
          echo "Reset appears to have worked, waiting 5 minutes."
          sleep 300
