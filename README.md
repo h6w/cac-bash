@@ -14,5 +14,8 @@ Now capable of handling multiple accounts!
 Specify either --login or --alias to use that account config from the cac-config.bash file.
 
 
+Acknowledgements
+================
 
+TickTick.sh JSON Parser from http://9ol.es/TheEmperorsNewClothes.html
 

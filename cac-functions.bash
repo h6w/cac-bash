@@ -25,8 +25,25 @@ build ()
 
 list ()
 {
-curl -s -k "${url}${uri[list]}?key=${KEY}&login=${LOGIN}" | sed -e 's/{/\n/g' -e 's/\}//g'
-echo ## Add a newline
+	echo "LISTING..."
+	RAW=$(curl -s -k "${url}${uri[list]}?key=${KEY}&login=${LOGIN}")
+	echo "PRETTY=$PRETTY"
+	case $PRETTY in
+	    original)
+		echo $(echo $RAW | sed -e 's/{/\n/g' -e 's/\}//g')
+		;;
+	    json)
+		echo $RAW
+		;;
+	    list)
+		list_prettifyer "$RAW"
+		;;
+	    *)
+		printf "ERROR:Unknown pretty type %s\n" $PRETTY
+		exit 1
+		;;
+	esac
+	echo
 }
 
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ticktick.sh
+
 ## Run some sanity checks before we start. (Palmed off to a separate file for clarity.)
 
 if [ -f cac-sanity.bash ]; then
@@ -8,6 +10,8 @@ else
     echo "ERROR: No cac-sanity.bash file.  This is required to check all the parts of this script are available."
     exit 1
 fi
+
+PRETTY='json'
 
 while [[ $# > 1 ]]; do
 	switch="$1"
@@ -37,6 +41,14 @@ while [[ $# > 1 ]]; do
 		    KEY="${i#*=}"
 		    shift # past argument=value
 		    ;;
+	    -p|--pretty)
+		    PRETTY="$2"
+		    shift 2 # past argument
+		    ;;
+	    -p=*|--pretty=*)
+		    PRETTY="${i#*=}"
+		    shift # past argument=value
+		    ;;
 	    *)
 		    echo "Unknown option: $switch"
 		    exit 1
@@ -44,11 +56,32 @@ while [[ $# > 1 ]]; do
 	esac
 done
 
+
+if [[ $# -eq 1 ]]; then
+    ACTION="$1"
+    echo "ACTION=$ACTION"
+else
+    echo "ERROR: We appear to be missing an action."
+fi
+
+
+#echo "Checking for pretty-print library..."
+#if [ "$PRETTY" != "json" ]; then
+#    if [ -f cac-pretty.bash ]; then
+#        . cac-pretty.bash
+#    else
+#        echo "Can\'t pretty print without cac-pretty.bash"
+#        exit 1
+#    fi
+#fi
+
 #echo "$ALIAS"
 #echo "$KEY"
 #echo "$LOGIN"
 
 ## If we don't have a key specified, or we do have an alias or login specified, then we *must* import cac-config.bash
+
+echo "Checking for cac-config.bash..."
 
 if [ -z "$KEY" ] && [ -f cac-config.bash ]; then
     . cac-config.bash
@@ -104,14 +137,17 @@ fi
 #echo "$KEY"
 #echo "$LOGIN"
 
+echo "Importing API config"
 . cac-api-config.bash
+
+echo "Importing CAC functions"
 . cac-functions.bash
 
 usage () 
 {
     cat <<EOT
 	CloudAtCost API CLI
-	Usage: cac [options] [action]
+	Usage: cac [authentication|options] [action]
 	Where: action - is one of:
 		build - build a VM
 		delete - delete a VM
@@ -119,7 +155,7 @@ usage ()
 		reset - reset a VM
 		templates - list templates
 
-               options - can include:
+               authentication - can include:
 		--alias=[alias]                ## Will look up alias in cac-config.bash (MOST PRIVATE)
                 OR
 		--login=[login]                ## Will look up login in cac-config.bash (LESS PRIVATE)
@@ -129,6 +165,9 @@ usage ()
                 If no alias or login/key pair is specified on the command line, 
                 we will use the login/key pair specified as the "default" alias in the config file, 
                 if it exists.
+
+	       options - can include
+                --pretty=(json|list|numbered|tree)    ## Will pretty-print the output.
 
 	TODO:
 		power - power operations (on, off, reset)
@@ -147,4 +186,28 @@ if [ "$#" -lt 1 ]; then
     exit 0
 fi
 
-$1
+## I originally had the prettifyer functions in cac-pretty.bash, so that it could be imported as necessary
+## However, anything that uses ticktick.sh has to be in this file, since ticktick.sh doesn't yet parse imported scripts. 
+## See issue https://github.com/kristopolous/TickTick/issues/37
+
+list_prettifyer () {
+    #echo "$1" | while read -r line; do
+#        parsethis="server = { $line }"
+        parsethis="server = $1"
+        tickParse "$1"
+        echo "$parsethis"
+
+	set | grep ^__tick
+
+        echo ``status``
+    
+        for server in ``data[*]``; do
+            printf "    - %s\n" ``${server}.servername``
+        done
+#    done
+}
+
+
+echo "About to do $ACTION"
+
+$ACTION
